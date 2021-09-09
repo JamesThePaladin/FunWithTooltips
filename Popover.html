@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" class="ui-mobile">
+
+<head>
+	<meta charset="utf-8">
+	<title> Cactus Services </title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+	<meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+	<meta name="msapplication-TileColor" content="#FFF200">
+	<meta name="theme-color" content="#000000">
+	<meta name="apple-mobile-web-app-title" content="Cactus Services">
+	<meta name="mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+	<link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
+
+	<script src="https://www.paypalobjects.com/api/checkout.js"> </script>
+	<script src="https://code.jquery.com/jquery-1.11.3.min.js"> </script>
+	<script src="jquery-cookie-master/src/jquery.cookie.js"> </script>
+	<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"> </script>
+	<script src="//cdn.jsdelivr.net/jquery.scrollto/2.1.2/jquery.scrollTo.min.js"> </script>
+	<script src="jquery.validate.js"> </script>
+	<script src="canvasWork/jquery.canvasResize.js"> </script>
+	<script src="canvasWork/binaryajax.js"> </script>
+	<script src="canvasWork/exif.js"> </script>
+	<script src="jquery.SimpleMask.js"> </script>
+
+	<link href='https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.css' rel='stylesheet' />
+	<link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css' rel='stylesheet'>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5/main.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5/main.min.js"></script>
+
+	<style>
+		.tooltipevent {
+			width: 200px;
+			/*
+	    height:100px;*/
+			background: #ccc;
+			position: absolute;
+			z-index: 10001;
+			transform: translate3d(-50%, -100%, 0);
+			font-size: 0.8rem;
+			box-shadow: 1px 1px 3px 0px #333;
+			line-height: 1rem;
+		}
+	
+		.tooltipevent div {
+			padding: 10px;
+			border: solid 1px #FFF200;
+		}
+	
+		.tooltipevent div:first-child {
+			color: White;
+			background-color: #333;
+		}
+	
+		.tooltipevent div:last-child {
+			background-color: whitesmoke;
+			position: relative;
+		}
+	
+		.tooltipevent>div:last-child::after,
+		.tooltipevent>div:last-child::before {
+			width: 0;
+			height: 0;
+			border: solid 5px transparent;
+			/*
+	    box-shadow: 1px 1px 2px 0px #333;*/
+			border-bottom: 0;
+			border-top-color: whitesmoke;
+			position: absolute;
+			display: block;
+			content: "";
+			bottom: -4px;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+	
+		.tooltipevent div:last-child::before {
+			border-top-color: #333;
+			bottom: -5px;
+		}
+	</style>
+</head>
+
+<body>
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			var calendarEl = document.getElementById('calendar');
+
+			var calendar = new FullCalendar.Calendar(calendarEl, {
+				timeZone: 'UTC',
+				initialView: 'resourceTimelineWeek',
+				headerToolbar: {
+					left: 'prev,next today',
+					center: 'title',
+					right: 'resourceTimelineWeek,resourceTimelineDay'
+				},
+				editable: true,
+				selectable: true,
+				select: function (info) {
+					console.log(info);
+					$('.tooltipevent').remove();
+					//info.jsEvent.srcElement.style.borderColor = 'red';
+					var tooltip = '<div class="tooltipevent" style="top:' + (info.jsEvent.clientY + 2) + 'px;left:' + (info.jsEvent.clientX) + 'px"><div>Add/Edit event<a href="#" style="position: absolute;top: -5px;right: 3px;color:#333;" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all tooltipeventClose">No text</a></div><div><input type="button" data-icon="plus" class="jbutton addJobButton ui-btn ui-icon-plus ui-btn-icon-left" data-corners="false" value="Add new job"><input type="button" data-icon="edit" data-theme="b" class="jbutton updateJobButton ui-btn ui-icon-edit ui-btn-icon-left" data-corners="false" value="Update job"></div>';
+					var $tooltip = $(tooltip).appendTo('body');
+					$(".jbutton").button().enhanceWithin();
+					eventInfo = info;
+					//alert('selected ' + info.startStr + ' to ' + info.endStr);
+				},
+				scrollTime: '00:00',
+				stickyHeaderDates: 'true',
+				stickyFooterScrollbar: 'true',
+
+				events: 'https://fullcalendar.io/demo-events.json?with-resources',
+				resourceAreaHeaderContent: 'Rooms',
+				resources: [
+					{ id: 'a', title: 'Auditorium A' },
+					{ id: 'b', title: 'Auditorium B', eventColor: 'green' },
+					{ id: 'c', title: 'Auditorium C', eventColor: 'orange' },
+					{
+						id: 'd', title: 'Auditorium D', children: [
+							{ id: 'd1', title: 'Room D1' },
+							{ id: 'd2', title: 'Room D2' }
+						]
+					},
+					{ id: 'e', title: 'Auditorium E' },
+					{ id: 'f', title: 'Auditorium F', eventColor: 'red' },
+					{ id: 'g', title: 'Auditorium G' },
+					{ id: 'h', title: 'Auditorium H' },
+					{ id: 'i', title: 'Auditorium I' },
+					{ id: 'j', title: 'Auditorium J' },
+					{ id: 'k', title: 'Auditorium K' },
+					{ id: 'l', title: 'Auditorium L' },
+					{ id: 'm', title: 'Auditorium M' },
+					{ id: 'n', title: 'Auditorium N' },
+					{ id: 'o', title: 'Auditorium O' },
+					{ id: 'p', title: 'Auditorium P' },
+					{ id: 'q', title: 'Auditorium Q' },
+					{ id: 'r', title: 'Auditorium R' },
+					{ id: 's', title: 'Auditorium S' },
+					{ id: 't', title: 'Auditorium T' },
+					{ id: 'u', title: 'Auditorium U' },
+					{ id: 'v', title: 'Auditorium V' },
+					{ id: 'w', title: 'Auditorium W' },
+					{ id: 'x', title: 'Auditorium X' },
+					{ id: 'y', title: 'Auditorium Y' },
+					{ id: 'z', title: 'Auditorium Z' },
+					{ id: 'a2', title: 'Auditorium A2' },
+					{ id: 'b2', title: 'Auditorium B2' },
+					{ id: 'c2', title: 'Auditorium C2' },
+					{ id: 'd2', title: 'Auditorium D2' },
+					{ id: 'e2', title: 'Auditorium E2' },
+					{ id: 'f2', title: 'Auditorium F2' },
+					{ id: 'g2', title: 'Auditorium G2' },
+					{ id: 'h2', title: 'Auditorium H2' },
+					{ id: 'i2', title: 'Auditorium I2' },
+					{ id: 'j2', title: 'Auditorium J2' },
+					{ id: 'k2', title: 'Auditorium K2' },
+					{ id: 'l2', title: 'Auditorium L2' },
+					{ id: 'm2', title: 'Auditorium M2' },
+					{ id: 'n2', title: 'Auditorium N2' },
+					{ id: 'o2', title: 'Auditorium O2' },
+					{ id: 'p2', title: 'Auditorium P2' },
+					{ id: 'q2', title: 'Auditorium Q2' },
+					{ id: 'r2', title: 'Auditorium R2' },
+					{ id: 's2', title: 'Auditorium S2' },
+					{ id: 't2', title: 'Auditorium T2' },
+					{ id: 'u2', title: 'Auditorium U2' },
+					{ id: 'v2', title: 'Auditorium V2' },
+					{ id: 'w2', title: 'Auditorium W2' },
+					{ id: 'x2', title: 'Auditorium X2' },
+					{ id: 'y2', title: 'Auditorium Y2' },
+					{ id: 'z2', title: 'Auditorium Z2' },
+					{ id: 'a3', title: 'Auditorium A3' },
+					{ id: 'b3', title: 'Auditorium B3' },
+					{ id: 'c3', title: 'Auditorium C3' },
+					{ id: 'd3', title: 'Auditorium D3' },
+					{ id: 'e3', title: 'Auditorium E3' },
+					{ id: 'f3', title: 'Auditorium F3' },
+					{ id: 'g3', title: 'Auditorium G3' },
+					{ id: 'h3', title: 'Auditorium H3' },
+					{ id: 'i3', title: 'Auditorium I3' },
+					{ id: 'j3', title: 'Auditorium J3' },
+					{ id: 'k3', title: 'Auditorium K3' },
+					{ id: 'l3', title: 'Auditorium L3' },
+					{ id: 'm3', title: 'Auditorium M3' },
+					{ id: 'n3', title: 'Auditorium N3' },
+					{ id: 'o3', title: 'Auditorium O3' },
+					{ id: 'p3', title: 'Auditorium P3' },
+					{ id: 'q3', title: 'Auditorium Q3' },
+					{ id: 'r3', title: 'Auditorium R3' },
+					{ id: 's3', title: 'Auditorium S3' },
+					{ id: 't3', title: 'Auditorium T3' },
+					{ id: 'u3', title: 'Auditorium U3' },
+					{ id: 'v3', title: 'Auditorium V3' },
+					{ id: 'w3', title: 'Auditorium W3' },
+					{ id: 'x3', title: 'Auditorium X3' },
+					{ id: 'y3', title: 'Auditorium Y3' },
+					{ id: 'z3', title: 'Auditorium Z3' }
+				],
+				eventClick: function (info) {
+					console.log(info);
+				},
+				eventMouseEnter: function (info) {
+					$('.tooltipevent').remove();
+					var tis=info.el;
+					console.log(info);
+					var tooltip = '<div class="tooltipevent" style="top:'+($(tis).offset().top-5)+'px;left:'+($(tis).offset().left+($(tis).width())/2)+'px"><div>' + info.event._def.extendedProps.jobName + '</div><div>Job Number: ' + info.event._def.extendedProps.jobNumber + '<br>Division: ' + info.event._def.extendedProps.divisionName + '<br>Superintendent: ' + info.event._def.extendedProps.superName + '<br>Team: ' + info.event._def.extendedProps.team + '</div></div>';
+					var $tooltip = $(tooltip).appendTo('body');
+				},
+				eventMouseLeave: function (info) {
+					console.log('eventMouseLeave');
+					$(info.el).css('z-index', 8);
+					setTimeout(function () {
+						if (!$(".tooltipevent:hover").length) {
+							$('.tooltipevent').remove();
+						}
+					}, 300);
+				}
+			});
+
+			calendar.render();
+		});
+
+		//this function is for the hover events, though Im implementing it differently above
+		$(".pop").each(function () {
+			var $pElem = $(this);
+			$pElem.popover(
+				{
+					html: true,
+					trigger: "manual",
+					title: getPopoverTitle($pElem.attr("id")),
+					content: getPopoverContent($pElem.attr("id")),
+					container: 'body',
+					animation: false
+				}
+			);
+		}).on("mouseenter", function () {
+			var _this = this;
+			$(this).popover("show");
+			console.log("mouse entered");
+			$(".popover").on("mouseleave", function () {
+				$(_this).popover('hide');
+			});
+		}).on("mouseleave", function () {
+			var _this = this;
+			setTimeout(function () {
+				if (!$(".popover:hover").length) {
+					$(_this).popover("hide");
+				}
+			}, 100);
+		});
+		function getPopoverTitle(target) {
+			return $("#" + target + "_content > h3.popover-title").html();
+		};
+
+		function getPopoverContent(target) {
+			return $("#" + target + "_content > div.popover-content").html();
+		};
+	</script>
+	<div id='calendar'></div>
+</body>
+
+</html>
