@@ -201,9 +201,6 @@
 					{ id: 'y3', title: 'Auditorium Y3' },
 					{ id: 'z3', title: 'Auditorium Z3' }
 				],
-				eventClick: function (info) {
-					console.log(info);
-				},
 				eventMouseEnter: function (info) {
 					$('.tooltipevent').remove();
 					var tis=info.el;
@@ -218,8 +215,18 @@
 						if (!$(".tooltipevent:hover").length) {
 							$('.tooltipevent').remove();
 						}
-					}, 300);
-				}
+					}, 200);
+				},
+				eventClick: function(info) {
+					console.log(info);
+					var tis=info.el;
+					$('.tooltipevent').remove();
+					//info.jsEvent.srcElement.style.borderColor = 'red';
+					var tooltip = '<div class="tooltipevent" style="top:'+($(tis).offset().top+10)+'px;left:'+($(tis).offset().left+($(tis).width())/2)+'px"><div>Add/Edit event<a href="#" style="position: absolute;top: -5px;right: 3px;color:#333;" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all tooltipeventClose">No text</a></div><div><input type="button" data-icon="delete" class="jbutton deleteJobButton ui-btn ui-icon-delete ui-btn-icon-left" data-corners="false" value="Delete job"><input type="button" data-icon="edit" data-theme="b" class="jbutton updateJobButton ui-btn ui-icon-edit ui-btn-icon-left" data-corners="false" value="Update job"></div>';
+					var $tooltip = $(tooltip).appendTo('body');
+					$(".jbutton").button().enhanceWithin();
+					eventInfo = info;
+				},
 			});
 
 			calendar.render();
