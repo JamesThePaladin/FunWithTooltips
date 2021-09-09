@@ -89,7 +89,7 @@
 	<script>
 		document.addEventListener('DOMContentLoaded', function () {
 			var calendarEl = document.getElementById('calendar');
-
+			var time = 0; //this is for our timeout functions so the tooltips quit being annoying, I had to make it viewable by the whole calendar
 			var calendar = new FullCalendar.Calendar(calendarEl, {
 				timeZone: 'UTC',
 				initialView: 'resourceTimelineWeek',
@@ -205,6 +205,7 @@
 					{ id: 'z3', title: 'Auditorium Z3' }
 				],
 				eventMouseEnter: function (info) {
+					clearTimeout(time);
 					$('.tooltipevent').remove(); //remove any previous tooltips
 					var tis=info.el; //create a variable for our target element
 					console.log(info); //print the params to the console
@@ -215,7 +216,7 @@
 				eventMouseLeave: function (info) {
 					console.log('eventMouseLeave');
 					$(info.el).css('z-index', 8);
-					setTimeout(function () {
+					time = setTimeout(function () {
 						if (!$(".tooltipevent:hover").length) {
 							$('.tooltipevent').remove();
 						}
@@ -235,42 +236,6 @@
 
 			calendar.render();
 		});
-
-		//this function is for the hover events, though Im implementing it differently above
-		$(".pop").each(function () {
-			var $pElem = $(this);
-			$pElem.popover(
-				{
-					html: true,
-					trigger: "manual",
-					title: getPopoverTitle($pElem.attr("id")),
-					content: getPopoverContent($pElem.attr("id")),
-					container: 'body',
-					animation: false
-				}
-			);
-		}).on("mouseenter", function () {
-			var _this = this;
-			$(this).popover("show");
-			console.log("mouse entered");
-			$(".popover").on("mouseleave", function () {
-				$(_this).popover('hide');
-			});
-		}).on("mouseleave", function () {
-			var _this = this;
-			setTimeout(function () {
-				if (!$(".popover:hover").length) {
-					$(_this).popover("hide");
-				}
-			}, 100);
-		});
-		function getPopoverTitle(target) {
-			return $("#" + target + "_content > h3.popover-title").html();
-		};
-
-		function getPopoverContent(target) {
-			return $("#" + target + "_content > div.popover-content").html();
-		};
 	</script>
 	<div id='calendar'></div>
 </body>
