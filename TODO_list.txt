@@ -1,0 +1,32 @@
+TODO:
+Add edit job functionality
+
+Add context menu on right click
+
+Check for duplicate job #'s server side, and either merge both to contain the divisions or delete on if its an exact match (except for id)
+
+TC division that is divided by other division's supers
+
+Change pending events text to black
+
+Assign Job popup needs functionality added to its save button to actually assign a job
+
+
+things that need calendar.refetchEvents();
+function:            starting line:
+updateJobButton      11119
+#SaveassignEvent     11073
+
+
+
+
+BUGS:
+Superintendent not being updated on eventDrop though it is in the code (line 10913)
+This^ bug above might be a logic issue between info(info.newResource != null) on line 10917 and its closing else statement that just has ids and days (just a guess tho)
+
+
+Assign Job window does not close after hitting save
+
+Tooltips dont vanish after hovering is done
+
+Add new does not always add the events correctly, but they do go to the database
