@@ -9,8 +9,6 @@ TC division that is divided by other division's supers
 
 Change pending events text to black
 
-Assign Job popup needs functionality added to its save button to actually assign a job
-
 Implement tooltip logic to keep them alive while hovering (lines 249-277 in Popover.html just copy paste eventMouseEnter & eventMouseLeave)
 var time = 0; is declared right below the calendar declaration so it can be used globally within the calendar. place it below var calendarEl.
 Then the two functions mentioned earlier can just be copy/pasted right in
