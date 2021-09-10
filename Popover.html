@@ -45,22 +45,22 @@
 			box-shadow: 1px 1px 3px 0px #333;
 			line-height: 1rem;
 		}
-	
+
 		.tooltipevent div {
 			padding: 10px;
 			border: solid 1px #FFF200;
 		}
-	
+
 		.tooltipevent div:first-child {
 			color: White;
 			background-color: #333;
 		}
-	
+
 		.tooltipevent div:last-child {
 			background-color: whitesmoke;
 			position: relative;
 		}
-	
+
 		.tooltipevent>div:last-child::after,
 		.tooltipevent>div:last-child::before {
 			width: 0;
@@ -77,16 +77,58 @@
 			left: 50%;
 			transform: translateX(-50%);
 		}
-	
+
 		.tooltipevent div:last-child::before {
 			border-top-color: #333;
 			bottom: -5px;
+		}
+
+		#context-menu {
+			position: fixed;
+			z-index: 10000;
+			width: 150px;
+			background: #1b1a1a;
+			border-radius: 5px;
+			transform: scale(0);
+			transform-origin: top left;
+		}
+
+		#context-menu.visible {
+			transform: scale(1);
+			transition: transform 200ms ease-in-out;
+		}
+
+		#context-menu .item {
+			padding: 8px 10px;
+			font-size: 15px;
+			color: #eee;
+			cursor: pointer;
+			border-radius: inherit;
+		}
+
+		#context-menu .item:hover {
+			background: #343434;
 		}
 	</style>
 </head>
 
 <body>
 	<script>
+
+
+	</script>
+	<div id='calendarContainer' style="padding: 20%;">
+		<div id='calendar'></div>
+	</div>
+	<div id="context-menu">
+		<div class="item">Add Job</div>
+		<div class="item">Edit Job</div>
+		<div class="item">Delete Job</div>
+		<div class="item">Refresh Calendar</div>
+		<div class="item">Drink Beer</div>
+	</div>
+	<script>
+		//FulCalendar Implementation
 		document.addEventListener('DOMContentLoaded', function () {
 			var calendarEl = document.getElementById('calendar');
 			var time = 0; //this is for our timeout functions so the tooltips quit being annoying, I had to make it viewable by the whole calendar
@@ -99,7 +141,7 @@
 					right: 'resourceTimelineWeek,resourceTimelineDay'
 				},
 				editable: true,
-				eventDragStart: function(info) {
+				eventDragStart: function (info) {
 					$('.tooltipevent').remove();
 				},
 				selectable: true,
@@ -207,10 +249,10 @@
 				eventMouseEnter: function (info) {
 					clearTimeout(time);
 					$('.tooltipevent').remove(); //remove any previous tooltips
-					var tis=info.el; //create a variable for our target element
-					console.log(info); //print the params to the console
+					var tis = info.el; //create a variable for our target element
+					console.log('eventMouseEnter'); //print the params to the console
 					//this next line is what makes the tooltip show up by injecting it into the dom.
-					var tooltip = '<div class="tooltipevent" style="top:'+($(tis).offset().top-5)+'px;left:'+($(tis).offset().left+($(tis).width())/2)+'px"><div>' + info.event._def.extendedProps.jobName + '</div><div>Job Number: ' + info.event._def.extendedProps.jobNumber + '<br>Division: ' + info.event._def.extendedProps.divisionName + '<br>Superintendent: ' + info.event._def.extendedProps.superName + '<br>Team: ' + info.event._def.extendedProps.team + '</div></div>';
+					var tooltip = '<div class="tooltipevent" style="top:' + ($(tis).offset().top - 5) + 'px;left:' + ($(tis).offset().left + ($(tis).width()) / 2) + 'px"><div>' + info.event._def.extendedProps.jobName + '</div><div>Job Number: ' + info.event._def.extendedProps.jobNumber + '<br>Division: ' + info.event._def.extendedProps.divisionName + '<br>Superintendent: ' + info.event._def.extendedProps.superName + '<br>Team: ' + info.event._def.extendedProps.team + '</div></div>';
 					var $tooltip = $(tooltip).appendTo('body'); //add that shit to the bottom our page body
 				},
 				eventMouseLeave: function (info) {
@@ -222,12 +264,12 @@
 						}
 					}, 200);
 				},
-				eventClick: function(info) {
+				eventClick: function (info) {
 					console.log(info);
-					var tis=info.el;
+					var tis = info.el;
 					$('.tooltipevent').remove();
 					//info.jsEvent.srcElement.style.borderColor = 'red';
-					var tooltip = '<div class="tooltipevent" style="top:'+($(tis).offset().top+10)+'px;left:'+($(tis).offset().left+($(tis).width())/2)+'px;"><div>Add/Edit event<a href="#" style="position: absolute;top: -5px;right: 3px;color:#333;" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all tooltipeventClose">No text</a></div><div><input type="button" data-icon="delete" class="jbutton deleteJobButton ui-btn ui-icon-delete ui-btn-icon-left" data-corners="false" value="Delete job"><input type="button" data-icon="edit" data-theme="b" class="jbutton updateJobButton ui-btn ui-icon-edit ui-btn-icon-left" data-corners="false" value="Update job"></div>';
+					var tooltip = '<div class="tooltipevent" style="top:' + ($(tis).offset().top + 10) + 'px;left:' + ($(tis).offset().left + ($(tis).width()) / 2) + 'px;"><div>Add/Edit event<a href="#" style="position: absolute;top: -5px;right: 3px;color:#333;" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all tooltipeventClose">No text</a></div><div><input type="button" data-icon="delete" class="jbutton deleteJobButton ui-btn ui-icon-delete ui-btn-icon-left" data-corners="false" value="Delete job"><input type="button" data-icon="edit" data-theme="b" class="jbutton updateJobButton ui-btn ui-icon-edit ui-btn-icon-left" data-corners="false" value="Update job"></div>';
 					var $tooltip = $(tooltip).appendTo('body');
 					$(".jbutton").button().enhanceWithin();
 					eventInfo = info;
@@ -236,8 +278,76 @@
 
 			calendar.render();
 		});
+
+		//context menu 
+		//this might be way over engineered for what we need but its a pretty good context menu
+		//we need some sort of click function that takes in the data of the event/day we right clicked on
+		//credits go to: https://github.com/GeorgianStan/context-menu-poc/blob/master/index.html
+		const contextMenu = document.getElementById("context-menu");
+		const scope = document.querySelector("body");
+
+		const normalizePozition = (mouseX, mouseY) => {
+			// ? compute what is the mouse position relative to the container element (scope)
+			let {
+				left: scopeOffsetX,
+				top: scopeOffsetY,
+			} = scope.getBoundingClientRect();
+
+			scopeOffsetX = scopeOffsetX < 0 ? 0 : scopeOffsetX;
+			scopeOffsetY = scopeOffsetY < 0 ? 0 : scopeOffsetY;
+
+			const scopeX = mouseX - scopeOffsetX;
+			const scopeY = mouseY - scopeOffsetY;
+
+			// ? check if the element will go out of bounds
+			const outOfBoundsOnX =
+				scopeX + contextMenu.clientWidth > scope.clientWidth;
+
+			const outOfBoundsOnY =
+				scopeY + contextMenu.clientHeight > scope.clientHeight;
+
+			let normalizedX = mouseX;
+			let normalizedY = mouseY;
+
+			// ? normalize on X
+			if (outOfBoundsOnX) {
+				normalizedX =
+					scopeOffsetX + scope.clientWidth - contextMenu.clientWidth;
+			}
+
+			// ? normalize on Y
+			if (outOfBoundsOnY) {
+				normalizedY =
+					scopeOffsetY + scope.clientHeight - contextMenu.clientHeight;
+			}
+
+			return { normalizedX, normalizedY };
+		};
+
+		scope.addEventListener("contextmenu", (event) => {
+			event.preventDefault();
+
+			const { clientX: mouseX, clientY: mouseY } = event;
+
+			const { normalizedX, normalizedY } = normalizePozition(mouseX, mouseY);
+
+			contextMenu.classList.remove("visible");
+
+			contextMenu.style.top = `${normalizedY}px`;
+			contextMenu.style.left = `${normalizedX}px`;
+
+			setTimeout(() => {
+				contextMenu.classList.add("visible");
+			});
+		});
+
+		scope.addEventListener("click", (e) => {
+			// ? close the menu if the user clicks outside of it
+			if (e.target.offsetParent != contextMenu) {
+				contextMenu.classList.remove("visible");
+			}
+		});
 	</script>
-	<div id='calendar'></div>
 </body>
 
 </html>
