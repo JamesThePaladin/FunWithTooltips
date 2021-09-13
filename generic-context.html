@@ -236,11 +236,11 @@
 			var time = 0; //this is for our timeout functions so the tooltips quit being annoying, I had to make it viewable by the whole calendar
 			var calendar = new FullCalendar.Calendar(calendarEl, {
 				timeZone: 'UTC',
-				initialView: 'resourceTimelineWeek',
+				initialView: 'resourceTimelineMonth',
 				headerToolbar: {
 					left: 'prev,next today',
 					center: 'title',
-					right: 'resourceTimelineWeek,resourceTimelineDay'
+					right: 'resourceTimelineMonth,resourceTimelineWeek,resourceTimelineDay'
 				},
 				editable: true,
 				eventDragStart: function (info) {

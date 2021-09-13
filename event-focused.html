@@ -241,11 +241,11 @@
             var time = 0; //this is for our timeout functions so the tooltips quit being annoying, I had to make it viewable by the whole calendar
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 timeZone: 'UTC',
-                initialView: 'resourceTimelineWeek',
+                initialView: 'resourceTimelineMonth',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'resourceTimelineWeek,resourceTimelineDay'
+                    right: 'resourceTimelineMonth,resourceTimelineWeek,resourceTimelineDay'
                 },
                 editable: true,
                 eventDragStart: function (info) {
@@ -405,23 +405,26 @@
         function contextMenuHandler(event) {
             var idx = $(this).index();
             console.log(idx + '  ' + event.data.eventId);
-
+            //for this switch to work the functions below have to share the exact names with their counterpart items on the context menu
+            //i.e. closeContext shares the function name so it works, but the name on the context menu item is cancel.
+            //the indexing in the switch statement lines up with the actual placement of the menu items in their list
+            //if either are moved out of their indexed spots (like addEvent and edit switching, the behavior will not follow automatically)
             switch (idx) {
                 // Leave 2 out as that is line separator
                 case 0: addEvent(); break;
                 case 1: editEvent(event.data.eventId); break;
                 case 3: deleteEvent(event.data.eventId); break;
                 case 4: refreshEvent(); break;
-                case 5: cancelMenu(event.data.eventId); break;
+                case 5: closeContext(event.data.eventId); break;
                 default:
             }
         }
-        //add 0, edit 1, delete 3, refresh 4, cancel 5
         //these events are empty but are for the context menu items
         //This one is set up in a way that the context menu only appears when clicking on an event, so the add option is not there
         function closeContext() {
             contextMenu.classList.remove("visible");
         }
+        //the addEvent function could probably be changed to assignElsewhere or something and just clone the job
         function addEvent() {
             $("#new-event").modal('show'); //show the modal
 			closeContext();
