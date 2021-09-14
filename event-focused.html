@@ -241,12 +241,12 @@
             var time = 0; //this is for our timeout functions so the tooltips quit being annoying, I had to make it viewable by the whole calendar
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 timeZone: 'UTC',
-                initialView: 'resourceTimelineMonth',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'resourceTimelineMonth,resourceTimelineWeek,resourceTimelineDay'
                 },
+                initialView: 'resourceTimelineMonth',
                 editable: true,
                 eventDragStart: function (info) {
                     $('.tooltipevent').remove();
@@ -269,7 +269,7 @@
                     info.el.addEventListener("contextmenu", function (e) {
                         e.preventDefault(); //prevent the default context menu from showing up
                         //get the top and most left of the page, this is used for offsetting the context menu
-                        var top = e.pageY; 
+                        var top = e.pageY;
                         var left = e.pageX;
 
                         // Display contextmenu and bind event for menu click events
@@ -279,7 +279,23 @@
                         $("#contextMenu").on("click", "li", { eventId: event.id }, contextMenuHandler);
                     });
                 },
-                events: 'https://fullcalendar.io/demo-events.json?with-resources',
+                eventSources: [ //this structure with the square brackets will take place of the events: attribute
+                    {
+                        url: 'https://fullcalendar.io/demo-events.json?with-resources', //events become json-like within curly brackets separated by commas
+                    },
+                    {
+                        //this is a shit example but I cant find another free url of json events
+                        //and as you know my test environment is still a little fucked
+                        //so this is the set up, I just used the same source twice but with this set up
+                        //we can pull holidays from our own sql server and make sure they cant be written to on the schedule
+                        url: 'https://fullcalendar.io/demo-events.json?with-resources',
+                        display: 'background',
+                        backgroundColor: 'black',
+                        textColor: 'white',
+                        overlap: false,
+                        editable: false,
+                    }
+                ],
                 resourceAreaHeaderContent: 'Rooms',
                 resources: [
                     { id: 'a', title: 'Auditorium A' },
@@ -427,7 +443,7 @@
         //the addEvent function could probably be changed to assignElsewhere or something and just clone the job
         function addEvent() {
             $("#new-event").modal('show'); //show the modal
-			closeContext();
+            closeContext();
         }
         function deleteEvent(id) {
             //if (confirm("Confirm Deletion?")) {
@@ -437,13 +453,13 @@
         }
         function editEvent(id) {
             $("#edit-event").modal('show'); //show the edit modal
-			closeContext();
+            closeContext();
         }
         function refreshEvent() {
             closeContext();
             window.location.reload();
         }
-        
+
         $(document).on("click", function (e) {
             $("#contextMenu").hide();
             $("#contextMenu")
