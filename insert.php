@@ -2,7 +2,12 @@
 
 //insert.php
 
-$connect = new PDO('mysql:host=localhost;dbname=test', 'root', '');
+$servername = "localhost";
+$dbname = "fullcalendar";
+$username = "root";
+$password = "";
+
+$connect = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
 
 if(isset($_POST["title"]))
 {

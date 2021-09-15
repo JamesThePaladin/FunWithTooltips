@@ -2,7 +2,7 @@
 //load.php
 header("Content-Type: application/json");
 $servername = "localhost";
-$dbname = "test";
+$dbname = "fullcalendar";
 $username = "root";
 $password = "";
 
