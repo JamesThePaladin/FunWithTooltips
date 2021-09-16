@@ -144,7 +144,7 @@
                 <div data-sortable-id="1.2" class="list-group-item nested-1">Item 1.2</div>
                 <div data-sortable-id="1.3" class="list-group-item nested-1">Item 1.3</div>
                 <div data-sortable-id="1.4" class="list-group-item nested-1">Item 1.4
-                    <div class="list-group nested-sortable">
+                    <div class="list-group nested-sortable-2">
                         <div data-sortable-id="2.1" class="list-group-item nested-2">Item 2.1</div>
                         <div data-sortable-id="2.2" class="list-group-item nested-2">Item 2.2</div>
                         <div data-sortable-id="2.3" class="list-group-item nested-2">Item 2.3</div>
@@ -277,12 +277,12 @@
         thats too damn bad because the author only put up an example at https://github.com/SortableJS/Sortable its under an Options tab in the read me near the top.
 
 
-        new Sortable(example2Left, {
+        new Sortable.create(example2Left, {
             group: 'top-level', // set lists to different groups
             animation: 150
         });
 
-        new Sortable(example2Right, {
+        new Sortable.create(example2Right, {
             group: 'ChipSeal-bttm-level', <---if we want each division to remain separated we have to do it like this with SortableJS
             animation: 150
         });

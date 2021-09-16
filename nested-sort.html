@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" class="ui-mobile">
+
+<head>
+    <meta charset="utf-8">
+    <title> Nested Sort </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+    <meta name="msapplication-TileColor" content="#FFF200">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-title" content="Cactus Services">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <!--This is the cdn for the sortable stuff, it comes ready out of the box really-->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
+        crossorigin="anonymous"></script>
+    <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css' rel='stylesheet'>
+    <style>
+        body {
+            float: left;
+            background-color: black;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            background-color: silver;
+            border:solid 1px whitesmoke;
+            border-radius: 0.5rem;
+        }
+
+        li {
+            background: #eee;
+            margin: 1px;
+            padding: 5px 10px;
+            border:solid 1px whitesmoke;
+            border-radius: 0.5rem;
+        }
+        
+        .sortable-ghost { /*for the selection thats being dragged, this makes it slightly less opac*/
+            opacity: .6;
+        }
+        .selected-li{ /*This is for the multiselectable TC list items, it highlights them in red when they are selected*/
+            background: #ff6b6b;
+            border-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <!--Here is the sortable lists and sublists-->
+    <!--Using a div instead of ul and li should work just the same-->
+    <ul id="DivsList">
+        <li>Paving
+            <ul id="Paving">
+                <li>Paul Bunnell - Crew 1</li>
+                <li>Jacob Raney - Crew 1</li>
+                <li>Eddie Sandifer - Crew 1</li>
+            </ul>
+        </li>
+        <li>Concrete
+            <ul id="Concrete">
+                <li>Dan Amparano-Crew 1</li>
+                <li>Robert Muhlhauser-Crew 1</li>
+            </ul>
+        </li>
+        <li>Chip Seal
+            <ul id="ChipSeal">
+                <li>Leon Campbell-Crew 1</li>
+                <li>Preston Hundley-Crew 1</li>
+            </ul>
+        </li>
+        <li>Fog Seal
+            <ul id="FogSeal">
+                <li>Alphino Nunley-Crew 1</li>
+                <li>Alphino Nunley-Crew 2</li>
+            </ul>
+        </li>
+        <li>Striping
+            <ul id="Striping">
+                <li>Aubrey McLaurin-Crew 1</li>
+                <li>Aubrey McLaurin-Crew 2</li>
+            </ul>
+        </li>
+        <li>Traffic Control
+            <ul id="TrafficControl">
+                <li>Striping - Aubrey-Crew 1</li>
+                <li>Striping - Aubrey-Crew 2</li>
+                <li>CS - Luis-Crew 1</li>
+                <li>CS - Jose-Crew 1</li>
+                <li>CS - Marco-Crew 1</li>
+                <li>CS - Trey-Crew 1</li>
+                <li>CS - Tim-Crew 1</li>
+                <li>CS - Charles-Crew 1</li>
+                <li>CS - Public-Crew 1</li>
+                <li>Mill - Ed-Crew 1</li>
+                <li>Grade - Chris-Crew 1</li>
+                <li>Grade - Pete-Crew 1</li>
+                <li>Grade - Steve-Crew 1</li>
+                <li>Concrete - Dan-Crew 1</li>
+                <li>Concrete - Robert-Crew 1</li>
+                <li>Pave - Jake-Crew 1</li>
+                <li>Pave - Rick-Crew 1</li>
+                <li>Pave - Paul-Crew 1</li>
+                <li>Chip - Leon-Crew 1</li>
+                <li>Chip - Preston-Crew 1</li>
+                <li>Fog - Alphino-Crew 1</li>
+                <li>Public-Crew 1</li>
+                <li>Public-Crew 2</li>
+                <li>Sub-Crew 1</li>
+                <li>Sub-Crew 2</li>
+            </ul>
+        </li>
+        <li>Spreader
+            <ul id="Spreader">
+                <li>Spreader-Crew 1</li>
+            </ul>
+        </li>
+        <li>Milling
+            <ul id="Milling">
+                <li>Ed Cunningham-Crew 1</li>
+            </ul>
+        </li>
+        <li>Crack Seal
+            <ul id="CrackSeal">
+                <li>Marco Acuna-Crew 1</li>
+                <li>Trey Romero-Crew 1</li>
+                <li>Jose Mendoza-Crew 1</li>
+                <li>Charles Petersen-Crew 1</li>
+                <li>Luis Valenzuela -Crew 1</li>
+                <li>Tim Osterholz-Crew 1</li>
+            </ul>
+        </li>
+        <li>Grading
+            <ul id="Grading">
+                <li>Pete Vidales-Crew 1</li>
+                <li>Chris Carmean-Crew 1</li>
+                <li>Steven Snyder-Crew 1</li>
+            </ul>
+        </li>
+    </ul>
+    <script>
+        /*
+        This is where all the magic happens and contains most of what matters in this example project
+        Just use Sortable.create(ID, {Options: '',}); to create new groups for each subgroup
+        With the group containing the group or subgroup ID and it will work
+        the Group option is what decides where each draggable can go, you can add options like pull: or put: to allow you to pull or place them in different Sortables
+        But honestly this works for our needs. There is no saving these orders in this project, I have no idea how to do that outside of creating a SortID system and 
+        connecting that to a DB.
+        */
+        Sortable.create(DivsList, { //create a sortable with this ID
+            group: 'DivsList', //assign a group to the ID, just in case we want more things in this group to drag and drop to and also to keep them separated
+            animation: 100 //this plays that little animation you see as the items flop around each other
+        }); //thats it, the rest of this is the same thing with different IDs
+        Sortable.create(Paving, {
+            group: "Paving",
+            animation: 100
+        });
+        Sortable.create(Concrete, {
+            group: "Concrete",
+            animation: 100
+        });
+        Sortable.create(ChipSeal, {
+            group: "ChipSeal",
+            animation: 100
+        });
+        Sortable.create(FogSeal, {
+            group: "FogSeal",
+            animation: 100
+        });
+        Sortable.create(Striping, {
+            group: "Striping",
+            animation: 100
+        });
+        Sortable.create(TrafficControl, {
+            group: "TrafficControl",
+            multiDrag: true, //this is the option that allows the TC list items to be multiselected, obv.
+            fallbackTolerance: 3, //specifically the documents said this was for touch control, I cannot tell you what that means
+            selectedClass: 'selected-li', //this option sets the css of the selected elements to whatever is in single quotes, things like # and . can be omitted
+            animation: 100
+        });
+        Sortable.create(Spreader, {
+            group: "Spreader",
+            animation: 100
+        });
+        Sortable.create(Milling, {
+            group: "Milling",
+            animation: 100
+        });
+        Sortable.create(CrackSeal, {
+            group: "CrackSeal",
+            animation: 100
+        });
+        Sortable.create(Grading, {
+            group: "Grading",
+            animation: 100
+        });
+    </script>
+</body>
+
+</html>
