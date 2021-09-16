@@ -13,19 +13,11 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
 
-    <script src="https://www.paypalobjects.com/api/checkout.js"> </script>
     <script src="https://code.jquery.com/jquery-1.11.3.min.js"> </script>
-    <script src="jquery-cookie-master/src/jquery.cookie.js"> </script>
     <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"> </script>
     <script src="//cdn.jsdelivr.net/jquery.scrollto/2.1.2/jquery.scrollTo.min.js"> </script>
-    <script src="jquery.validate.js"> </script>
-    <script src="canvasWork/jquery.canvasResize.js"> </script>
-    <script src="canvasWork/binaryajax.js"> </script>
-    <script src="canvasWork/exif.js"> </script>
-    <script src="jquery.SimpleMask.js"> </script>
 
     <!--SortableJS-->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
@@ -177,6 +169,10 @@
         the Group option is what decides where each draggable can go, you can add options like pull: or put: to allow you to pull or place them in different Sortables
         But honestly this works for our needs. There is no saving these orders in this project, I have no idea how to do that outside of creating a SortID system and 
         connecting that to a DB.
+
+
+        JUST TO LET YOU KNOW, it does not matter where these groups are, so long as they share the same group ID they'll be able to sort with each other.
+        Wether or not the Paving teams will move with paving when you drag it is beyond me with the div set up, as my ul is a child of the list item so it follows. Those divs.. idk.
         */
         Sortable.create(DivsList, { //create a sortable with this ID
             group: 'DivsList', //assign a group to the ID, just in case we want more things in this group to drag and drop to and also to keep them separated
@@ -202,12 +198,13 @@
             group: "Striping",
             animation: 100
         });
-        Sortable.create(TrafficControl, {
+        Sortable.create(TrafficControl, {//traffic control is special because of the amount of crews it has
             group: "TrafficControl",
             multiDrag: true, //this is the option that allows the TC list items to be multiselected, obv.
             fallbackTolerance: 3, //specifically the documents said this was for touch control, I cannot tell you what that means
             selectedClass: 'selected-li', //this option sets the css of the selected elements to whatever is in single quotes, things like # and . can be omitted
-            animation: 100
+            animation: 150, // ms, animation speed of moving items when sorting, `0` — without animation
+            invertSwap: true //this makes the swap happen only after the object you are dragging passes whatever you are dragging it over, its a little easier to wield this way
         });
         Sortable.create(Spreader, {
             group: "Spreader",
