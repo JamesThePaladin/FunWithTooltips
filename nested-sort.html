@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title> Nested Sort </title>
+    <title> Cactus Services </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
     <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
@@ -13,24 +13,127 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <!--This is the cdn for the sortable stuff, it comes ready out of the box really-->
+    <link rel="stylesheet" href="themes/jquery.mobile.icons.min.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile.structure-1.4.5.min.css" />
+
+    <script src="https://www.paypalobjects.com/api/checkout.js"> </script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"> </script>
+    <script src="jquery-cookie-master/src/jquery.cookie.js"> </script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"> </script>
+    <script src="//cdn.jsdelivr.net/jquery.scrollto/2.1.2/jquery.scrollTo.min.js"> </script>
+    <script src="jquery.validate.js"> </script>
+    <script src="canvasWork/jquery.canvasResize.js"> </script>
+    <script src="canvasWork/binaryajax.js"> </script>
+    <script src="canvasWork/exif.js"> </script>
+    <script src="jquery.SimpleMask.js"> </script>
+
+    <!--SortableJS-->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+    <!--Bootstrap 4.5.3-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx"
         crossorigin="anonymous"></script>
     <link href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.1/css/all.css' rel='stylesheet'>
+    
+    <!--FullCalendar v5-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5/main.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar-scheduler@5/main.min.js"></script>
+
     <style>
-        body {
-            float: left;
-            background-color: black;
+        /*Context Menu CSS*/
+        .tooltipevent {
+            width: 200px;
+            /*
+	    height:100px;*/
+            background: #ccc;
+            position: absolute;
+            z-index: 10001;
+            transform: translate3d(-50%, -100%, 0);
+            font-size: 0.8rem;
+            box-shadow: 1px 1px 3px 0px #333;
+            line-height: 1rem;
         }
+
+        .tooltipevent div {
+            padding: 10px;
+            border: solid 1px #FFF200;
+        }
+
+        .tooltipevent div:first-child {
+            color: White;
+            background-color: #333;
+        }
+
+        .tooltipevent div:last-child {
+            background-color: whitesmoke;
+            position: relative;
+        }
+
+        .tooltipevent>div:last-child::after,
+        .tooltipevent>div:last-child::before {
+            width: 0;
+            height: 0;
+            border: solid 5px transparent;
+            /*
+	    box-shadow: 1px 1px 2px 0px #333;*/
+            border-bottom: 0;
+            border-top-color: whitesmoke;
+            position: absolute;
+            display: block;
+            content: "";
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tooltipevent div:last-child::before {
+            border-top-color: #333;
+            bottom: -5px;
+        }
+
+        .dropdown-menu {
+            background: #1b1a1a;
+            border: medium none;
+            border-radius: 3px;
+            box-shadow: 0 0 3px rgba(86, 96, 117, 0.7);
+            display: none;
+            float: left;
+            font-size: 12px;
+            left: 0;
+            list-style: none outside none;
+            padding: 0;
+            position: absolute;
+            text-shadow: none;
+            top: 100%;
+            z-index: 1000;
+        }
+
+        .dropdown-menu>li>a {
+            border-radius: 3px;
+            color: #eee;
+            line-height: 25px;
+            margin: 4px;
+            text-align: left;
+            font-weight: normal;
+        }
+
+        .dropdown-menu>li>a.font-bold {
+            font-weight: 600;
+        }
+
+        /*SortableJS CSS*/
+        .ListContainer {
+            float: left;
+        }
+
         ul {
             list-style: none;
             padding: 0;
-            background-color:slategrey;
-            border:solid 1px whitesmoke;
+            background-color: slategrey;
+            border: solid 1px whitesmoke;
             border-radius: 0.5rem;
         }
 
@@ -38,16 +141,19 @@
             background: #eee;
             margin: 1px;
             padding: 5px 10px;
-            border:solid 1px whitesmoke;
+            border: solid 1px whitesmoke;
             border-radius: 0.5rem;
         }
-        
-        .sortable-ghost { /*for the selection thats being dragged, this makes it slightly less opac*/
+
+        .sortable-ghost {
+            /*for the selection thats being dragged, this makes it slightly less opac*/
             opacity: .6;
         }
-        .selected-li{ /*This is for the multiselectable TC list items, it highlights them in cyan when they are selected*/
-            background:lightcyan;
-            border-color:cyan;
+
+        .selected-li {
+            /*This is for the multiselectable TC list items, it highlights them in cyan when they are selected*/
+            background: lightcyan;
+            border-color: cyan;
         }
     </style>
 </head>
@@ -55,7 +161,7 @@
 <body>
     <!--Here is the sortable lists and sublists-->
     <!--Using a div instead of ul and li should work just the same-->
-    <ul id="DivsList">
+    <ul id="DivsList" class="ListContainer">
         <li>Paving
             <ul id="Paving">
                 <li>Paul Bunnell - Crew 1</li>
@@ -144,63 +250,410 @@
             </ul>
         </li>
     </ul>
-    <script>
-        /*
-        This is where all the magic happens and contains most of what matters in this example project
-        Just use Sortable.create(ID, {Options: '',}); to create new groups for each subgroup
-        With the group containing the group or subgroup ID and it will work
-        the Group option is what decides where each draggable can go, you can add options like pull: or put: to allow you to pull or place them in different Sortables
-        But honestly this works for our needs. There is no saving these orders in this project, I have no idea how to do that outside of creating a SortID system and 
-        connecting that to a DB.
-        */
-        Sortable.create(DivsList, { //create a sortable with this ID
-            group: 'DivsList', //assign a group to the ID, just in case we want more things in this group to drag and drop to and also to keep them separated
-            animation: 100 //this plays that little animation you see as the items flop around each other
-        }); //thats it, the rest of this is the same thing with different IDs
-        Sortable.create(Paving, {
-            group: "Paving",
-            animation: 100
-        });
-        Sortable.create(Concrete, {
-            group: "Concrete",
-            animation: 100
-        });
-        Sortable.create(ChipSeal, {
-            group: "ChipSeal",
-            animation: 100
-        });
-        Sortable.create(FogSeal, {
-            group: "FogSeal",
-            animation: 100
-        });
-        Sortable.create(Striping, {
-            group: "Striping",
-            animation: 100
-        });
-        Sortable.create(TrafficControl, {
-            group: "TrafficControl",
-            multiDrag: true, //this is the option that allows the TC list items to be multiselected, obv.
-            fallbackTolerance: 3, //specifically the documents said this was for touch control, I cannot tell you what that means
-            selectedClass: 'selected-li', //this option sets the css of the selected elements to whatever is in single quotes, things like # and . can be omitted
-            animation: 100
-        });
-        Sortable.create(Spreader, {
-            group: "Spreader",
-            animation: 100
-        });
-        Sortable.create(Milling, {
-            group: "Milling",
-            animation: 100
-        });
-        Sortable.create(CrackSeal, {
-            group: "CrackSeal",
-            animation: 100
-        });
-        Sortable.create(Grading, {
-            group: "Grading",
-            animation: 100
-        });
-    </script>
+    <!--Fullcalendar Init-->
+    <div id="calendar"></div>
+
+    <!--Context menu-->
+    <div id="contextMenu" class="dropdown-menu" role="menu">
+        <div><a tabindex="-1" href="#">Add</a></div>
+        <div><a tabindex="-1" href="#">Edit</a></div>
+        <div class="divider">
+            </li>
+            <div><a tabindex="-1" href="#">Delete</a></div>
+            <div><a tabindex="-1" href="#">Refresh</a></div>
+            <div><a tabindex="-1" href="#">Cancel</a></div>
+        </div>
+        <!--Modal Add Init-->
+        <div class="modal fade" id="new-event" tabindex="-1" role="dialog" aria-labelledby="new-event-label"
+            style="display: none;" data-popupoffbl="bl" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form class="new-event--form">
+                            <div class="form-group">
+                                <label class="form-control-label">Event title</label>
+                                <input type="text" class="form-control form-control-alternative new-event--title"
+                                    placeholder="Event Title">
+                            </div>
+                            <div class="form-group mb-0">
+                                <label class="form-control-label d-block mb-3">Status color</label>
+                                <div class="btn-group btn-group-toggle btn-group-colors event-tag"
+                                    data-toggle="buttons">
+                                    <label class="btn bg-info active"><input type="radio" name="event-tag"
+                                            value="bg-info" autocomplete="off" checked=""></label>
+                                    <label class="btn bg-warning"><input type="radio" name="event-tag"
+                                            value="bg-warning" autocomplete="off"></label>
+                                    <label class="btn bg-danger"><input type="radio" name="event-tag" value="bg-danger"
+                                            autocomplete="off"></label>
+                                    <label class="btn bg-success"><input type="radio" name="event-tag"
+                                            value="bg-success" autocomplete="off"></label>
+                                    <label class="btn bg-default"><input type="radio" name="event-tag"
+                                            value="bg-default" autocomplete="off"></label>
+                                    <label class="btn bg-primary"><input type="radio" name="event-tag"
+                                            value="bg-primary" autocomplete="off"></label>
+                                </div>
+                            </div>
+                            <label class="form-control-label d-block mb-3">Start Date</label><input type="datetime"
+                                class="new-event--start" placeholder="DD/MM/YYY" value="">
+                            <label class="form-control-label d-block mb-3">End Date</label><input type="datetime"
+                                class="new-event--end" placeholder="DD/MM/YYYY" value="">
+                        </form>
+                    </div>
+                    <!-- Modal footer -->
+                    <!--These buttones in the footer might not work, they're running off of bootstrap's min.js not FullCalendar's-->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary new-event--add">Add event</button>
+                        <button type="button" class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Add Modal End-->
+
+        <!-- Edit Modal Init-->
+        <div class="modal fade" id="edit-event" tabindex="-1" role="dialog" aria-labelledby="edit-event-label"
+            aria-hidden="true" style="display: none !important;">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form class="edit-event--form">
+                            <div class="form-group">
+                                <label class="form-control-label">Event title</label>
+                                <input type="text" id="title-entry-edit"
+                                    class="form-control form-control-alternative edit-event--title"
+                                    placeholder="Event Title" val="">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label d-block mb-3">Status color</label>
+                                <div class="btn-group btn-group-toggle btn-group-colors event-tag mb-0"
+                                    data-toggle="buttons">
+                                    <label class="btn bg-info active"><input type="radio" name="event-tag"
+                                            value="bg-info" autocomplete="off" checked=""></label>
+                                    <label class="btn bg-warning"><input type="radio" name="event-tag"
+                                            value="bg-warning" autocomplete="off"></label>
+                                    <label class="btn bg-danger"><input type="radio" name="event-tag" value="bg-danger"
+                                            autocomplete="off"></label>
+                                    <label class="btn bg-success"><input type="radio" name="event-tag"
+                                            value="bg-success" autocomplete="off"></label>
+                                    <label class="btn bg-default"><input type="radio" name="event-tag"
+                                            value="bg-default" autocomplete="off"></label>
+                                    <label class="btn bg-primary"><input type="radio" name="event-tag"
+                                            value="bg-primary" autocomplete="off"></label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-control-label">Description</label>
+                                <textarea id="event-desc"
+                                    class="form-control form-control-alternative edit-event--description textarea-autosize"
+                                    placeholder="Event Description"></textarea>
+                                <i class="form-group--bar"></i>
+                            </div>
+                            <input type="hidden" class="edit-event--id">
+                        </form>
+                    </div>
+                    <!-- Modal footer -->
+                    <!--These buttones in the footer might not work, they're running off of bootstrap's min.js not FullCalendar's-->
+                    <div class="modal-footer">
+                        <button class="btn btn-primary" data-calendar="update">Update</button>
+                        <button class="btn btn-danger" data-calendar="delete">Delete</button>
+                        <button class="btn btn-link ml-auto" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Edit Modal End-->
+        <script>
+            /*
+            This is where all the magic happens and contains most of what matters in this example project
+            Just use Sortable.create(ID, {Options: '',}); to create new groups for each subgroup
+            With the group containing the group or subgroup ID and it will work
+            the Group option is what decides where each draggable can go, you can add options like pull: or put: to allow you to pull or place them in different Sortables
+            But honestly this works for our needs. There is no saving these orders in this project, I have no idea how to do that outside of creating a SortID system and 
+            connecting that to a DB.
+            */
+            Sortable.create(DivsList, { //create a sortable with this ID
+                group: 'DivsList', //assign a group to the ID, just in case we want more things in this group to drag and drop to and also to keep them separated
+                animation: 100 //this plays that little animation you see as the items flop around each other
+            }); //thats it, the rest of this is the same thing with different IDs
+            Sortable.create(Paving, {
+                group: "Paving",
+                animation: 100
+            });
+            Sortable.create(Concrete, {
+                group: "Concrete",
+                animation: 100
+            });
+            Sortable.create(ChipSeal, {
+                group: "ChipSeal",
+                animation: 100
+            });
+            Sortable.create(FogSeal, {
+                group: "FogSeal",
+                animation: 100
+            });
+            Sortable.create(Striping, {
+                group: "Striping",
+                animation: 100
+            });
+            Sortable.create(TrafficControl, {
+                group: "TrafficControl",
+                multiDrag: true, //this is the option that allows the TC list items to be multiselected, obv.
+                fallbackTolerance: 3, //specifically the documents said this was for touch control, I cannot tell you what that means
+                selectedClass: 'selected-li', //this option sets the css of the selected elements to whatever is in single quotes, things like # and . can be omitted
+                animation: 100
+            });
+            Sortable.create(Spreader, {
+                group: "Spreader",
+                animation: 100
+            });
+            Sortable.create(Milling, {
+                group: "Milling",
+                animation: 100
+            });
+            Sortable.create(CrackSeal, {
+                group: "CrackSeal",
+                animation: 100
+            });
+            Sortable.create(Grading, {
+                group: "Grading",
+                animation: 100
+            });
+
+            //FulCalendar Init
+            document.addEventListener('DOMContentLoaded', function () {
+                var calendarEl = document.getElementById('calendar');
+                var time = 0; //this is for our timeout functions so the tooltips quit being annoying, I had to make it viewable by the whole calendar
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    timeZone: 'UTC',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'resourceTimelineMonth,resourceTimelineWeek,resourceTimelineDay'
+                    },
+                    initialView: 'resourceTimelineMonth',
+                    editable: true,
+                    eventDragStart: function (info) {
+                        $('.tooltipevent').remove();
+                    },
+                    selectable: true,
+                    select: function (info) {
+                        console.log(info);
+                        $('.tooltipevent').remove();
+                        //info.jsEvent.srcElement.style.borderColor = 'red';
+                        var tooltip = '<div class="tooltipevent" style="top:' + (info.jsEvent.clientY + 2) + 'px;left:' + (info.jsEvent.clientX) + 'px"><div>Add/Edit event<a href="#" style="position: absolute;top: -5px;right: 3px;color:#333;" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all tooltipeventClose">No text</a></div><div><input type="button" data-icon="plus" class="jbutton addJobButton ui-btn ui-icon-plus ui-btn-icon-left" data-corners="false" value="Add new job"><input type="button" data-icon="edit" data-theme="b" class="jbutton updateJobButton ui-btn ui-icon-edit ui-btn-icon-left" data-corners="false" value="Update job"></div>';
+                        var $tooltip = $(tooltip).appendTo('body');
+                        $(".jbutton").button().enhanceWithin();
+                        eventInfo = info;
+                        //alert('selected ' + info.startStr + ' to ' + info.endStr);
+                    },
+                    scrollTime: '00:00',
+                    stickyHeaderDates: 'true',
+                    stickyFooterScrollbar: 'true',
+                    eventDidMount: function (info) { //this method makes use of eventDidMount for delivering event data
+                        info.el.addEventListener("contextmenu", function (e) {
+                            e.preventDefault(); //prevent the default context menu from showing up
+                            //get the top and most left of the page, this is used for offsetting the context menu
+                            var top = e.pageY;
+                            var left = e.pageX;
+
+                            // Display contextmenu and bind event for menu click events
+                            $("#contextMenu").show();
+                            $("#contextMenu").css({ position: 'absolute' });
+                            $("#contextMenu").offset({ left: left, top: top });
+                            $("#contextMenu").on("click", "li", { eventId: event.id }, contextMenuHandler);
+                        });
+                    },
+                    eventSources: [ //this structure with the square brackets will take place of the events: attribute
+                        {
+                            url: 'https://fullcalendar.io/demo-events.json?with-resources', //events become json-like within curly brackets separated by commas
+                        },
+                        {
+                            //this is a shit example but I cant find another free url of json events
+                            //and as you know my test environment is still a little fucked
+                            //so this is the set up, I just used the same source twice but with this set up
+                            //we can pull holidays from our own sql server and make sure they cant be written to on the schedule
+                            url: 'https://fullcalendar.io/demo-events.json?with-resources',
+                            display: 'background',
+                            backgroundColor: 'black',
+                            textColor: 'white',
+                            overlap: false,
+                            editable: false,
+                        }
+                    ],
+                    resourceAreaHeaderContent: 'Rooms',
+                    resources: [
+                        { id: 'a', title: 'Auditorium A' },
+                        { id: 'b', title: 'Auditorium B', eventColor: 'green' },
+                        { id: 'c', title: 'Auditorium C', eventColor: 'orange' },
+                        {
+                            id: 'd', title: 'Auditorium D', children: [
+                                { id: 'd1', title: 'Room D1' },
+                                { id: 'd2', title: 'Room D2' }
+                            ]
+                        },
+                        { id: 'e', title: 'Auditorium E' },
+                        { id: 'f', title: 'Auditorium F', eventColor: 'red' },
+                        { id: 'g', title: 'Auditorium G' },
+                        { id: 'h', title: 'Auditorium H' },
+                        { id: 'i', title: 'Auditorium I' },
+                        { id: 'j', title: 'Auditorium J' },
+                        { id: 'k', title: 'Auditorium K' },
+                        { id: 'l', title: 'Auditorium L' },
+                        { id: 'm', title: 'Auditorium M' },
+                        { id: 'n', title: 'Auditorium N' },
+                        { id: 'o', title: 'Auditorium O' },
+                        { id: 'p', title: 'Auditorium P' },
+                        { id: 'q', title: 'Auditorium Q' },
+                        { id: 'r', title: 'Auditorium R' },
+                        { id: 's', title: 'Auditorium S' },
+                        { id: 't', title: 'Auditorium T' },
+                        { id: 'u', title: 'Auditorium U' },
+                        { id: 'v', title: 'Auditorium V' },
+                        { id: 'w', title: 'Auditorium W' },
+                        { id: 'x', title: 'Auditorium X' },
+                        { id: 'y', title: 'Auditorium Y' },
+                        { id: 'z', title: 'Auditorium Z' },
+                        { id: 'a2', title: 'Auditorium A2' },
+                        { id: 'b2', title: 'Auditorium B2' },
+                        { id: 'c2', title: 'Auditorium C2' },
+                        { id: 'd2', title: 'Auditorium D2' },
+                        { id: 'e2', title: 'Auditorium E2' },
+                        { id: 'f2', title: 'Auditorium F2' },
+                        { id: 'g2', title: 'Auditorium G2' },
+                        { id: 'h2', title: 'Auditorium H2' },
+                        { id: 'i2', title: 'Auditorium I2' },
+                        { id: 'j2', title: 'Auditorium J2' },
+                        { id: 'k2', title: 'Auditorium K2' },
+                        { id: 'l2', title: 'Auditorium L2' },
+                        { id: 'm2', title: 'Auditorium M2' },
+                        { id: 'n2', title: 'Auditorium N2' },
+                        { id: 'o2', title: 'Auditorium O2' },
+                        { id: 'p2', title: 'Auditorium P2' },
+                        { id: 'q2', title: 'Auditorium Q2' },
+                        { id: 'r2', title: 'Auditorium R2' },
+                        { id: 's2', title: 'Auditorium S2' },
+                        { id: 't2', title: 'Auditorium T2' },
+                        { id: 'u2', title: 'Auditorium U2' },
+                        { id: 'v2', title: 'Auditorium V2' },
+                        { id: 'w2', title: 'Auditorium W2' },
+                        { id: 'x2', title: 'Auditorium X2' },
+                        { id: 'y2', title: 'Auditorium Y2' },
+                        { id: 'z2', title: 'Auditorium Z2' },
+                        { id: 'a3', title: 'Auditorium A3' },
+                        { id: 'b3', title: 'Auditorium B3' },
+                        { id: 'c3', title: 'Auditorium C3' },
+                        { id: 'd3', title: 'Auditorium D3' },
+                        { id: 'e3', title: 'Auditorium E3' },
+                        { id: 'f3', title: 'Auditorium F3' },
+                        { id: 'g3', title: 'Auditorium G3' },
+                        { id: 'h3', title: 'Auditorium H3' },
+                        { id: 'i3', title: 'Auditorium I3' },
+                        { id: 'j3', title: 'Auditorium J3' },
+                        { id: 'k3', title: 'Auditorium K3' },
+                        { id: 'l3', title: 'Auditorium L3' },
+                        { id: 'm3', title: 'Auditorium M3' },
+                        { id: 'n3', title: 'Auditorium N3' },
+                        { id: 'o3', title: 'Auditorium O3' },
+                        { id: 'p3', title: 'Auditorium P3' },
+                        { id: 'q3', title: 'Auditorium Q3' },
+                        { id: 'r3', title: 'Auditorium R3' },
+                        { id: 's3', title: 'Auditorium S3' },
+                        { id: 't3', title: 'Auditorium T3' },
+                        { id: 'u3', title: 'Auditorium U3' },
+                        { id: 'v3', title: 'Auditorium V3' },
+                        { id: 'w3', title: 'Auditorium W3' },
+                        { id: 'x3', title: 'Auditorium X3' },
+                        { id: 'y3', title: 'Auditorium Y3' },
+                        { id: 'z3', title: 'Auditorium Z3' }
+                    ],
+                    eventMouseEnter: function (info) {
+                        clearTimeout(time);
+                        $('.tooltipevent').remove(); //remove any previous tooltips
+                        var tis = info.el; //create a variable for our target element
+                        console.log('eventMouseEnter'); //print the params to the console
+                        //this next line is what makes the tooltip show up by injecting it into the dom.
+                        var tooltip = '<div class="tooltipevent" style="top:' + ($(tis).offset().top - 5) + 'px;left:' + ($(tis).offset().left + ($(tis).width()) / 2) + 'px"><div>' + info.event._def.extendedProps.jobName + '</div><div>Job Number: ' + info.event._def.extendedProps.jobNumber + '<br>Division: ' + info.event._def.extendedProps.divisionName + '<br>Superintendent: ' + info.event._def.extendedProps.superName + '<br>Team: ' + info.event._def.extendedProps.team + '</div></div>';
+                        var $tooltip = $(tooltip).appendTo('body'); //add that shit to the bottom our page body
+                    },
+                    eventMouseLeave: function (info) {
+                        console.log('eventMouseLeave');
+                        $(info.el).css('z-index', 8);
+                        time = setTimeout(function () {
+                            if (!$(".tooltipevent:hover").length) {
+                                $('.tooltipevent').remove();
+                            }
+                        }, 200);
+                    },
+                    eventClick: function (info) {
+                        console.log(info);
+                        var tis = info.el;
+                        $('.tooltipevent').remove();
+                        //info.jsEvent.srcElement.style.borderColor = 'red';
+                        var tooltip = '<div class="tooltipevent" style="top:' + ($(tis).offset().top + 10) + 'px;left:' + ($(tis).offset().left + ($(tis).width()) / 2) + 'px;"><div>Add/Edit event<a href="#" style="position: absolute;top: -5px;right: 3px;color:#333;" class="ui-btn ui-icon-delete ui-btn-icon-notext ui-corner-all tooltipeventClose">No text</a></div><div><input type="button" data-icon="delete" class="jbutton deleteJobButton ui-btn ui-icon-delete ui-btn-icon-left" data-corners="false" value="Delete job"><input type="button" data-icon="edit" data-theme="b" class="jbutton updateJobButton ui-btn ui-icon-edit ui-btn-icon-left" data-corners="false" value="Update job"></div>';
+                        var $tooltip = $(tooltip).appendTo('body');
+                        $(".jbutton").button().enhanceWithin();
+                        eventInfo = info;
+                    },
+                });
+
+                calendar.render();
+            });
+
+            //context menu 
+            //This is a different method of implementing a context menu with event data being passed through
+            //Im not sure which method is better so they are here for you to choose
+            function contextMenuHandler(event) {
+                var idx = $(this).index();
+                console.log(idx + '  ' + event.data.eventId);
+                //for this switch to work the functions below have to share the exact names with their counterpart items on the context menu
+                //i.e. closeContext shares the function name so it works, but the name on the context menu item is cancel.
+                //the indexing in the switch statement lines up with the actual placement of the menu items in their list
+                //if either are moved out of their indexed spots (like addEvent and edit switching, the behavior will not follow automatically)
+                switch (idx) {
+                    // Leave 2 out as that is line separator
+                    case 0: addEvent(); break;
+                    case 1: editEvent(event.data.eventId); break;
+                    case 3: deleteEvent(event.data.eventId); break;
+                    case 4: refreshEvent(); break;
+                    case 5: closeContext(event.data.eventId); break;
+                    default:
+                }
+            }
+            //these events are empty but are for the context menu items
+            //This one is set up in a way that the context menu only appears when clicking on an event, so the add option is not there
+            function closeContext() {
+                contextMenu.classList.remove("visible");
+            }
+            //the addEvent function could probably be changed to assignElsewhere or something and just clone the job
+            function addEvent() {
+                $("#new-event").modal('show'); //show the modal
+                closeContext();
+            }
+            function deleteEvent(id) {
+                //if (confirm("Confirm Deletion?")) {
+                alert('delete');
+                closeContext();
+                //}
+            }
+            function editEvent(id) {
+                $("#edit-event").modal('show'); //show the edit modal
+                closeContext();
+            }
+            function refreshEvent() {
+                closeContext();
+                window.location.reload();
+            }
+
+            $(document).on("click", function (e) {
+                $("#contextMenu").hide();
+                $("#contextMenu")
+                    .unbind()
+                    .click(function () { }); // Make sure click event is removed from contextmenu otherwise it will fire multiple times!
+            });
+		//end context menu code
+        </script>
 </body>
 
 </html>
